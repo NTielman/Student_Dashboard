@@ -1,143 +1,84 @@
 import './App.css';
-// import '../public/test.csv';
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { setData, setStudents, setAssignmnts } from './actions';
+import { useDispatch } from 'react-redux';
+import Dashboard from './components/Dashboard';
 
 function App() {
+  const dispatch = useDispatch();
 
-  async function getData() {
-    const response = await fetch('test.csv');
-    const data = await response.text();
-    const studentNames = [];
-    const opdrachten = [];
-    const dataObj = [];
+  useEffect(() => {
+    const getData = async () => {
 
-    const rows = data.split('\n').slice(1);
-    rows.forEach(text => {
+      //fetch data from csv file
+      const response = await fetch('/Data/student-data.csv');
+      const data = await response.text();
 
-      const row = text.split(',');
-      const student = row[0];
-      const opdrTitle = row[1];
-      const diffiNum = +row[2];
-      const satisNum = +row[3];
-      const studentObj = {
-        name: student,
-        isActive: true,
-        data: [{ title: opdrTitle, difficulty: diffiNum, satisfaction: satisNum }],
-        id: dataObj.length + 1
-      };
+      //initialise empty arrays to hold data info
+      const studentNames = [];
+      const opdrachtenLijst = [];
+      const database = [];
 
-      if (!studentNames.includes(student)) {
-        studentNames.push(student);
-      }
+      //split the data by line break and remove (slice) headers
+      const row = data.split('\n').slice(1);
 
-      if (!opdrachten.includes(opdrTitle)) {
-        opdrachten.push(opdrTitle);
-      }
+      row.forEach(value => {
+        //split each row value by comma
+        const column = value.split(',');
 
-      //if student already in array
-      if (dataObj.find(obj => obj.name === student)) {
+        const student = column[0];
+        const opdrTitle = column[1];
+        const difficulty = +column[2];
+        const satisfying = +column[3];
+        const studentObj = {
+          name: student, //Evelyn
+          isActive: true, //sets student checkbox as checked
+          data: [{ title: opdrTitle, diffiScore: difficulty, satisScore: satisfying }],
+          id: database.length + 1 //sets student id 
+        };
 
-        //find student obj
-        const foundStudent = dataObj.find(obj => obj.name === student);
+        //if studentarray doesn't include student yet, add student 
+        if (!studentNames.includes(student)) {
+          studentNames.push(student);
+        }
 
-        //make copy of projects data
-        const copyData = foundStudent.data;
+        //if opdrachtenLijst doesn't include opdracht yet, add opdracht 
+        if (!opdrachtenLijst.includes(opdrTitle)) {
+          opdrachtenLijst.push(opdrTitle);
+        }
 
-        //add new opdracht/project to array of opdrachten
-        const opdrObj = { title: opdrTitle, difficulty: diffiNum, satisfaction: satisNum };
-        foundStudent.data = [...copyData, opdrObj];
+        //checks if database already includes studentObject
+        if (database.find(obj => obj.name === student)) {
 
-      } else {
-        //add student to array
-        dataObj.push(studentObj);
-      }
+          //find student obj
+          const foundStudent = database.find(obj => obj.name === student);
 
-    });
+          //make copy of student projects data
+          const copyData = foundStudent.data;
 
-    const getGemmidelde = (array) => {
+          //add new opdracht to students opdrachtenLijst
+          const opdrObj = { title: opdrTitle, diffiScore: difficulty, satisScore: satisfying };
+          foundStudent.data = [...copyData, opdrObj];
 
-      if (array.length === 0) {
-        console.log('error in getGemmidelde: received empty array');
-      } else {
-        const total = array.reduce((acc, val) => acc + val);
-        const gem = total / array.length;
-        return gem;
-      }
-
-    }
-
-    const getOpdrArray = (opTitle, metric) => {
-      const opdrachtArray = [];
-      dataObj.forEach(obj => {
-
-        //if student is selected
-        if (obj.isActive) {
-          //find opdracht
-          const opdracht = obj.data.find(elt => elt.title === opTitle);
-          //find metric diffiNum satisNum
-          const metricNum = opdracht[metric];
-          opdrachtArray.push(metricNum);
+        } else {
+          //add student to database
+          database.push(studentObj);
         }
 
       });
 
-      if (opdrachtArray.length === 0) {
-        console.log('error in getOpdrArray: no students selected');
-      }
-      return opdrachtArray;
+      //send data to reducers to initialise state
+      dispatch(setAssignmnts(opdrachtenLijst));
+      dispatch(setStudents(studentNames));
+      dispatch(setData(database));
+
     }
 
-    const chartData = () => {
-      const diffiNums = [];
-      const satisNums = [];
-
-      opdrachten.forEach(opdr => {
-        //get gemmiddelde per opdracht
-        const gem = getGemmidelde(getOpdrArray(opdr, 'difficulty'))
-        const opdrDataObj = { title: opdr, diffiNum: gem };
-        diffiNums.push(opdrDataObj);
-      });
-
-      opdrachten.forEach(opdr => {
-        //get gemmiddelde per opdracht
-        const gem = getGemmidelde(getOpdrArray(opdr, 'satisfaction'))
-        const opdrDataObj = { title: opdr, satisNum: gem };
-        satisNums.push(opdrDataObj);
-      });
-
-    };
-
-    const opdrachtData = (opdr) => {
-      const opdrSatCijfers = [];
-      const opdrDifCijfers = [];
-
-      const satArray = getOpdrArray(opdr, 'satisfaction');
-      const diffArray = getOpdrArray(opdr, 'difficulty');
-
-      for (let n = 0; n < satArray.length; n++) {
-
-        const obj = { student: studentNames[n], satisNum: satArray[n] };
-        opdrSatCijfers.push(obj);
-      }
-
-      for (let n = 0; n < diffArray.length; n++) {
-
-        const obj = { student: studentNames[n], diffiNum: diffArray[n] };
-        opdrDifCijfers.push(obj);
-      }
-
-    };
-
-    opdrachtData('SCRUM');
-
-  }
-
-  getData();
+    getData();
+  }, []);
 
   return (
-    <div className="App">
-      hello
-    </div>
+    <Dashboard />
   );
 }
 

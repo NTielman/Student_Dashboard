@@ -1,6 +1,6 @@
 import React from 'react';
 
-function SortMenu() {
+const SortMenu = () => {
     return (
         <div>
             SortMenu

@@ -1,9 +1,12 @@
 import React from 'react';
+import Charts from './Charts';
+import Sidebar from './Sidebar';
 
-function HomePage() {
+const HomePage = () => {
     return (
         <div>
-            home
+            <Charts />
+            <Sidebar />
         </div>
     );
 }

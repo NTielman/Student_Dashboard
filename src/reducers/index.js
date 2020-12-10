@@ -1,15 +1,13 @@
-const rootReducer = (state = true, action) => {
+import { combineReducers } from 'redux';
+import studentData from './studentData';
+import studentNames from './studentNames';
+import assignments from './assignments';
 
-    switch (action.type) {
+const rootReducer = combineReducers({
+    studentData,
+    studentNames,
+    assignments
 
-        case 'TOGGLE_FORM':
-            //return opposite of state
-            return !state;
-
-        default:
-            return state;
-    }
-
-}
+});
 
 export default rootReducer;
