@@ -1,3 +1,12 @@
 .App-link {
   color: #61dafb;
 }
+
+.avatar-container {
+  width: 180px;
+  height: 180px;
+  background-color: brown;
+  background-size: cover;
+  background-blend-mode: overlay;
+  background-image: url(https://www.pngitem.com/pimgs/m/375-3757223_free-icon-download-people-avatar-icon-transparent-background.png);
+}

@@ -15,17 +15,10 @@ const Dashboard = () => {
                 <Nav />
                 <SortMenu />
                 <Switch>
-                    <Route path='/' exact>
-                        <HomePage />
-                    </Route>
-                    <Route path="/StudentPage/:name">
-                        <StudentPage />
-                    </Route>
-                    <Route path="/OpdrachtPage/:title">
-                        <OpdrachtPage />
-                    </Route>
+                    <Route path='/' exact component={HomePage} />
+                    <Route path="/StudentPage/:name" component={StudentPage} />
+                    <Route path="/OpdrachtPage/:title" component={OpdrachtPage} />
                 </Switch>
-
             </div>
         </Router>
     )

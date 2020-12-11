@@ -9,48 +9,55 @@ const HomePage = () => {
     const opdrachtenlijst = useSelector(state => state.assignments);
     const database = useSelector(state => state.studentData);
 
-    //generates data to be sent to charts
+    //generates array of data to be sent to charts
     const getChartData = (metric) => {
         const numberArray = [];
 
         opdrachtenlijst.forEach(opdracht => {
             //get average per opdracht
-            const average = getAverage(getStudentRatings(database, opdracht, metric))
-            const opdrachtObj = { title: opdracht, score: average };
-            numberArray.push(opdrachtObj);
+            const average = getAverage(getStudentRatings(database, opdracht, metric));
+            numberArray.push(average);
         });
         return numberArray;
     };
 
-    //calculates average satisfaction| difficulty score
-    const getAverageScore = (metric) => {
-        const numberArray = [];
+    //generates data to be sent to charts
+    const getTableData = () => {
+        const rows = [];
 
         opdrachtenlijst.forEach(opdracht => {
             //get average per opdracht
-            const average = getAverage(getStudentRatings(database, opdracht, metric))
-            numberArray.push(average);
+            const averageDiff = getAverage(getStudentRatings(database, opdracht, 'diffiScore'));
+            const averageSatis = getAverage(getStudentRatings(database, opdracht, 'satisScore'));
+            const overallScore = Math.round(getAverage([averageDiff, averageSatis]));
+            const columns = {
+                title: opdracht,
+                diffiNum: averageDiff,
+                satisNum: averageSatis,
+                overallScore
+            };
+            rows.push(columns);
         });
-
-        const avgScore = getAverage(numberArray);
-        return avgScore;
+        return rows;
     };
 
     //data and extra info to be displayed in sidebar
     const sidebarData = {
         avatarUrl: '',
         name: 'Winc Academy',
+        age: '',
         tel: '063-904-1258',
         email: 'welkom@wincacademy.nl',
         data: {
+            labels: ['satisfaction', 'difficulty'],
             datasets: [{
                 label: 'overall satisfaction score',
-                data: [{
-                    satisScore: getAverageScore('satisScore'),
-                    diffiScore: getAverageScore('diffiScore')
-                }],
-                backgroundColor: ['rgba(255, 99, 132, 0.2)',
-                    'rgba(270, 99, 132, 0.2)']
+                data: [
+                    getAverage(getChartData('satisScore')),
+                    getAverage(getChartData('diffiScore'))
+                ],
+                backgroundColor: ['green',
+                    'orange']
             }]
         }
     };
@@ -60,18 +67,20 @@ const HomePage = () => {
         datasets: [{
             label: 'difficulty score',
             data: getChartData('diffiScore'),
-            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+            backgroundColor: 'blue'
         },
         {
             label: 'satisfaction score',
             data: getChartData('satisScore'),
-            backgroundColor: 'rgba(270, 99, 132, 0.2)'
+            backgroundColor: 'orange'
         }]
     };
 
+    const tableData = getTableData();
+
     return (
         <div>
-            <Charts data={chartData} />
+            <Charts data={chartData} table={tableData} />
             <Sidebar data={sidebarData} />
         </div>
     );
