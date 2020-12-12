@@ -65,7 +65,7 @@ const Charts = ({ data, table }) => {
                                 )
                             } else {
                                 return (
-                                    <tr key={row.name}>
+                                    <tr key={row.id}>
                                         <th>{row.name}</th>
                                         <td>{row.diffiNum}</td>
                                         <td>{row.satisNum}</td>

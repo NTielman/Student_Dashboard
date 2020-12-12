@@ -13,6 +13,8 @@ const getStudentRatings = (database, opdrachtTitle, metric) => {
             //find metric info of opdracht difficultyNumber | satisfactionNumber
             const metricNum = opdracht[metric];
             ratings.push(metricNum);
+        } else {
+            ratings.push('');
         }
 
     });

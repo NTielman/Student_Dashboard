@@ -28,8 +28,8 @@ function App() {
 
         const student = column[0];
         const opdrTitle = column[1];
-        const difficulty = +column[2];
-        const satisfying = +column[3];
+        const difficulty = parseInt(column[2]);
+        const satisfying = parseInt(column[3]);
         const studentObj = {
           name: student, //Evelyn
           isActive: true, //sets student checkbox as checked

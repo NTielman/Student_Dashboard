@@ -7,8 +7,8 @@ import getStudentRatings from '../functions/getStudentRatings';
 
 const OpdrachtPage = ({ match }) => {
 
-    const studentNames = useSelector(state => state.studentNames);
     const database = useSelector(state => state.studentData);
+    const studentNames = useSelector(state => state.studentNames);
 
     //generates array of data to be sent to charts
     const getChartData = (opdracht, metric) => {
@@ -26,16 +26,34 @@ const OpdrachtPage = ({ match }) => {
         const diffScore = getStudentRatings(database, match.params.title, 'diffiScore');
         const satisScore = getStudentRatings(database, match.params.title, 'satisScore');
 
-        for (let n = 0; n < diffScore.length; n++) {
-            const overallScore = Math.round(getAverage([diffScore[n], satisScore[n]]));
-            const columns = {
-                name: studentNames[n],
-                diffiNum: diffScore[n],
-                satisNum: satisScore[n],
-                overallScore
-            };
-            rows.push(columns);
-        }
+        studentNames.forEach(student => {
+            //check if student is active
+            const foundStudent = database.find(prsn => prsn.name === student);
+            const n = database.indexOf(foundStudent);
+
+            // console.log(foundStudent);
+            if (foundStudent.isActive) {
+                const overallScore = getAverage([diffScore[n], satisScore[n]]);
+                const columns = {
+                    name: foundStudent.name,
+                    diffiNum: diffScore[n],
+                    satisNum: satisScore[n],
+                    overallScore,
+                    id: n
+                };
+                rows.push(columns);
+            } else {
+                const columns = {
+                    name: foundStudent.name,
+                    diffiNum: '-',
+                    satisNum: '-',
+                    overallScore: '-',
+                    id: n
+                };
+                rows.push(columns);
+            }
+
+        });
 
         return rows;
     };

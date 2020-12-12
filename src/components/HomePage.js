@@ -29,7 +29,7 @@ const HomePage = () => {
             //get average per opdracht
             const averageDiff = getAverage(getStudentRatings(database, opdracht, 'diffiScore'));
             const averageSatis = getAverage(getStudentRatings(database, opdracht, 'satisScore'));
-            const overallScore = Math.round(getAverage([averageDiff, averageSatis]));
+            const overallScore = getAverage([averageDiff, averageSatis]);
             const columns = {
                 title: opdracht,
                 diffiNum: averageDiff,
