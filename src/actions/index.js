@@ -44,9 +44,54 @@ export const toggleStudent = (student) => {
 
 /* usedBy: App.js */
 // sets initial assignments and projects (state)
-export const setAssignmnts = (assignments) => {
+export const setChartData = (assignments) => {
     return {
-        type: 'SET-ASSIGNMENTS',
+        type: 'SET-CHART-DATA',
         payload: assignments,
+    }
+}
+
+/* usedBy: App.js */
+// sets initial assignments and projects (state)
+export const sortChart = (param) => {
+    return {
+        type: 'SORT-CHART',
+        payload: param,
+    }
+}
+
+/* usedBy: App.js */
+// sets initial assignments and projects (state)
+export const updateChart = (database) => {
+    return {
+        type: 'UPDATE-CHART',
+        payload: database,
+    }
+}
+
+/* usedBy: App.js */
+// sets initial assignments and projects (state)
+export const setOpChartData = (assignments) => {
+    return {
+        type: 'SET-OPDRACHT-CHART-DATA',
+        payload: assignments,
+    }
+}
+
+/* usedBy: App.js */
+// sets initial assignments and projects (state)
+export const sortOpChart = (param) => {
+    return {
+        type: 'SORT-OPDRACHT-CHART',
+        payload: param,
+    }
+}
+
+/* usedBy: App.js */
+// sets initial assignments and projects (state)
+export const updateOpChart = (database) => {
+    return {
+        type: 'UPDATE-OPDRACHT-CHART',
+        payload: database,
     }
 }

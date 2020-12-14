@@ -1,12 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Bar, Line } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
+import getStudentRatings from '../functions/getStudentRatings';
+import { setOpChartData, resetData } from '../actions';
 
 const Charts = ({ data, table }) => {
+
+    const dispatch = useDispatch();
+    const database = useSelector(state => state.studentData);
+    //generates array of data to be sent to charts
+    const getChartData = (opdracht) => {
+        const metrics = ['satisScore', 'diffiScore']
+
+        metrics.forEach(metric => {
+            //get student ratings
+            const ratings = getStudentRatings(database, opdracht, metric);
+            dispatch(setOpChartData({ opdracht }));
+            dispatch(setOpChartData({ [metric]: ratings }));
+        });
+
+    };
 
     return (
         <div className='charts-container'>
             <div className='bar-chart'>
+                <span className="chart-tooltip bar-tooltip">
+                    <span className="tooltiptext">
+                        click to filter out a metric
+                    </span>
+                </span>
                 <Bar
                     options={{
                         scales: {
@@ -23,6 +46,11 @@ const Charts = ({ data, table }) => {
             </div>
 
             <div className='line-chart'>
+                <span className="chart-tooltip line-tooltip">
+                    <span className="tooltiptext">
+                        click to filter out a metric
+                    </span>
+                </span>
                 <Line
                     options={{
                         scales: {
@@ -53,7 +81,10 @@ const Charts = ({ data, table }) => {
                             if (row.title !== undefined) {
                                 return (
                                     <tr key={row.title}>
-                                        <th>
+                                        <th onClick={() => {
+                                            dispatch(resetData())
+                                            getChartData(row.title)
+                                        }}>
                                             <Link to={`/OpdrachtPage/${row.title}`}>
                                                 {row.title}
                                             </Link>

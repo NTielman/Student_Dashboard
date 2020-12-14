@@ -1,43 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Charts from './Charts';
 import Sidebar from './Sidebar';
 import { useSelector } from 'react-redux';
 import getAverage from '../functions/getAverage';
-import getStudentRatings from '../functions/getStudentRatings';
 
 const OpdrachtPage = ({ match }) => {
 
+    const [labels, setLabels] = useState([]);
+    const [satisNums, setSatisNums] = useState([]);
+    const [diffiNums, setDiffiNums] = useState([]);
+
     const database = useSelector(state => state.studentData);
-    const studentNames = useSelector(state => state.studentNames);
+    const getOpChartData = useSelector(state => state.opdrachtChartData);
 
-    //generates array of data to be sent to charts
-    const getChartData = (opdracht, metric) => {
+    const setChartData = () => {
+        setLabels(getOpChartData.labels);
+        setSatisNums(getOpChartData.satisScore);
+        setDiffiNums(getOpChartData.diffiScore);
+    }
 
-        //get student ratings
-        const ratings = getStudentRatings(database, opdracht, metric);
+    useEffect(() => {
+        setChartData();
+    }, [getOpChartData]);
 
-        return ratings;
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            label: 'difficulty score',
+            data: diffiNums,
+            backgroundColor: 'blue'
+        },
+        {
+            label: 'satisfaction score',
+            data: satisNums,
+            backgroundColor: 'orange'
+        }]
     };
 
     //generates data to be sent to table
     const getTableData = () => {
         const rows = [];
 
-        const diffScore = getStudentRatings(database, match.params.title, 'diffiScore');
-        const satisScore = getStudentRatings(database, match.params.title, 'satisScore');
-
-        studentNames.forEach(student => {
+        labels.forEach(student => {
             //check if student is active
             const foundStudent = database.find(prsn => prsn.name === student);
-            const n = database.indexOf(foundStudent);
+            const n = labels.indexOf(student);
 
-            // console.log(foundStudent);
             if (foundStudent.isActive) {
-                const overallScore = getAverage([diffScore[n], satisScore[n]]);
+                const overallScore = getAverage([diffiNums[n], satisNums[n]]);
                 const columns = {
-                    name: foundStudent.name,
-                    diffiNum: diffScore[n],
-                    satisNum: satisScore[n],
+                    name: student,
+                    diffiNum: diffiNums[n],
+                    satisNum: satisNums[n],
                     overallScore,
                     id: n
                 };
@@ -58,6 +72,8 @@ const OpdrachtPage = ({ match }) => {
         return rows;
     };
 
+    const tableData = getTableData();
+
     //data and extra info to be displayed in sidebar
     const sidebarData = {
         avatarUrl: '',
@@ -70,30 +86,14 @@ const OpdrachtPage = ({ match }) => {
             datasets: [{
                 label: 'overall satisfaction score',
                 data: [
-                    getAverage(getChartData(match.params.title, 'satisScore')),
-                    getAverage(getChartData(match.params.title, 'diffiScore'))
+                    getAverage(satisNums),
+                    getAverage(diffiNums)
                 ],
                 backgroundColor: ['green',
                     'orange']
             }]
         }
     };
-
-    const chartData = {
-        labels: studentNames,
-        datasets: [{
-            label: 'difficulty score',
-            data: getChartData(match.params.title, 'diffiScore'),
-            backgroundColor: 'blue'
-        },
-        {
-            label: 'satisfaction score',
-            data: getChartData(match.params.title, 'satisScore'),
-            backgroundColor: 'orange'
-        }]
-    };
-
-    const tableData = getTableData();
 
     return (
         <div>

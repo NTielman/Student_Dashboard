@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectStudent, resetData, toggleStudent } from '../actions';
+import { selectStudent, resetData, toggleStudent, updateChart, updateOpChart } from '../actions';
 
 const Nav = () => {
     const studentNames = useSelector(state => state.studentNames);
@@ -27,7 +27,10 @@ const Nav = () => {
             <ul className='nav-links'>
                 <li>
                     <Link to='/'
-                        onClick={() => dispatch(resetData())}>
+                        onClick={() => {
+                            dispatch(resetData())
+                            dispatch(updateChart(studentData))
+                        }}>
                         Home
                     </Link>
                 </li>
@@ -39,7 +42,11 @@ const Nav = () => {
                             name="name"
                             className="checkbox"
                             checked={studentIsChecked(student)}
-                            onChange={(event) => dispatch(toggleStudent(event.target))}
+                            onChange={(event) => {
+                                dispatch(toggleStudent(event.target))
+                                dispatch(updateChart(studentData))
+                                dispatch(updateOpChart(studentData))
+                            }}
                             id={students.indexOf(student) + 1}
                             value={student}>
                         </input>
@@ -47,6 +54,7 @@ const Nav = () => {
                             id={student}
                             onClick={(event) => {
                                 dispatch(selectStudent(event.target.id))
+                                dispatch(updateChart(studentData))
                             }}>
                             {student}
                         </Link>

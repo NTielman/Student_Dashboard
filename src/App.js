@@ -1,8 +1,10 @@
 import './App.css';
 import React, { useEffect } from 'react';
-import { setData, setStudents, setAssignmnts } from './actions';
+import { setData, setStudents, setChartData, setOpChartData } from './actions';
 import { useDispatch } from 'react-redux';
 import Dashboard from './components/Dashboard';
+import getStudentRatings from './functions/getStudentRatings';
+import getAverage from './functions/getAverage';
 
 function App() {
   const dispatch = useDispatch();
@@ -16,7 +18,7 @@ function App() {
 
       //initialise empty arrays to hold data info
       const studentNames = [];
-      const opdrachtenLijst = [];
+      const labels = [];
       const database = [];
 
       //split the data by line break and remove (slice) headers
@@ -43,8 +45,8 @@ function App() {
         }
 
         //if opdrachtenLijst doesn't include opdracht yet, add opdracht 
-        if (!opdrachtenLijst.includes(opdrTitle)) {
-          opdrachtenLijst.push(opdrTitle);
+        if (!labels.includes(opdrTitle)) {
+          labels.push(opdrTitle);
         }
 
         //checks if database already includes studentObject
@@ -67,10 +69,26 @@ function App() {
 
       });
 
+      const metrics = ['diffiScore', 'satisScore'];
+
+      //generates array of data to be sent to charts
+      metrics.forEach(metric => {
+        const numberArray = [];
+
+        labels.forEach(opdracht => {
+          //get average per opdracht
+          const average = getAverage(getStudentRatings(database, opdracht, metric));
+          numberArray.push(average);
+
+        });
+        dispatch(setChartData({ [metric]: numberArray }));
+      });
+
       //send data to reducers to initialise state
-      dispatch(setAssignmnts(opdrachtenLijst));
+      dispatch(setChartData({ labels }));
       dispatch(setStudents(studentNames));
       dispatch(setData(database));
+      dispatch(setOpChartData({ labels: studentNames }));
 
     }
 
