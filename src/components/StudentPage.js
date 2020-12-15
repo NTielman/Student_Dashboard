@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Charts from './Charts';
 import Sidebar from './Sidebar';
+import SortMenu from "./SortMenu";
 import { useSelector } from 'react-redux';
 import getAverage from '../functions/getAverage';
 
@@ -22,18 +23,30 @@ const StudentPage = ({ match }) => {
         setChartData();
     }, [getChartData]);
 
-    const chartData = {
-        labels,
-        datasets: [{
-            label: 'difficulty score',
-            data: diffiNums,
-            backgroundColor: 'blue'
-        },
-        {
-            label: 'satisfaction score',
-            data: satisNums,
-            backgroundColor: 'orange'
-        }]
+    const chartData = (canvas) => {
+        const ctx = canvas.getContext('2d');
+        let diffiGradient = ctx.createLinearGradient(0, 200, 0, 350);
+        diffiGradient.addColorStop(0, 'rgb(0, 204, 188)');
+        diffiGradient.addColorStop(1, 'rgb(97, 24, 152)');
+
+        let satisGradient = ctx.createLinearGradient(0, 200, 0, 350);
+        satisGradient.addColorStop(0, 'rgb(244, 81, 126)');
+        satisGradient.addColorStop(.6, 'rgb(97, 24, 152)');
+        satisGradient.addColorStop(1, ' rgb(26, 15, 67)');
+
+        return {
+            labels,
+            datasets: [{
+                label: 'difficulty score',
+                data: diffiNums,
+                backgroundColor: diffiGradient
+            },
+            {
+                label: 'satisfaction score',
+                data: satisNums,
+                backgroundColor: satisGradient
+            }]
+        }
     };
 
     //generates data to be sent to table
@@ -72,14 +85,18 @@ const StudentPage = ({ match }) => {
 
     const tableData = getTableData();
 
-    //data and extra info to be displayed in sidebar
-    const sidebarData = {
-        avatarUrl: '',
-        name: match.params.name,
-        age: Math.floor(Math.random() * 80),
-        tel: '012-345-6789',
-        email: `${match.params.name}@gmail.com`,
-        data: {
+    const sidebarChart = (canvas) => {
+        const ctx = canvas.getContext('2d');
+        let diffiGradient = ctx.createLinearGradient(20, 0, 180, 0);
+        diffiGradient.addColorStop(1, 'rgb(0, 204, 188)');
+        diffiGradient.addColorStop(0, 'rgb(97, 24, 152)');
+
+        let satisGradient = ctx.createLinearGradient(180, 0, 20, 0);
+        satisGradient.addColorStop(1, 'rgb(244, 81, 126)');
+        satisGradient.addColorStop(.3, 'rgb(97, 24, 152)');
+        satisGradient.addColorStop(0, ' rgb(26, 15, 67)');
+
+        return {
             labels: ['satisfaction', 'difficulty'],
             datasets: [{
                 label: 'overall satisfaction score',
@@ -87,16 +104,29 @@ const StudentPage = ({ match }) => {
                     getAverage(satisNums),
                     getAverage(diffiNums)
                 ],
-                backgroundColor: ['green',
-                    'orange']
+                borderColor: 'rgb(26, 15, 67)',
+                backgroundColor: [satisGradient,
+                    diffiGradient]
             }]
         }
+    }
+
+    //data and extra info to be displayed in sidebar
+    const sidebarData = {
+        avatarUrl: '',
+        name: match.params.name,
+        age: Math.floor(Math.random() * 80),
+        tel: '012-345-6789',
+        email: `${match.params.name}@gmail.com`,
     };
 
     return (
-        <div>
-            <Charts data={chartData} table={tableData} />
-            <Sidebar data={sidebarData} />
+        <div className='page-container'>
+            <div className='middle-box'>
+                <SortMenu />
+                <Charts data={chartData} table={tableData} />
+            </div>
+            <Sidebar data={sidebarData} chart={sidebarChart} />
         </div>
     );
 }

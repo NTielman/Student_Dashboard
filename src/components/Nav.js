@@ -25,7 +25,7 @@ const Nav = () => {
     return (
         <nav>
             <ul className='nav-links'>
-                <li>
+                <li className='student-list-item home-li'>
                     <Link to='/'
                         onClick={() => {
                             dispatch(resetData())
@@ -36,28 +36,32 @@ const Nav = () => {
                 </li>
                 {students.map(student => {
                     return (<li
+                        className='student-list-item'
                         key={student}>
-                        <input
-                            type="checkbox"
-                            name="name"
-                            className="checkbox"
-                            checked={studentIsChecked(student)}
-                            onChange={(event) => {
-                                dispatch(toggleStudent(event.target))
-                                dispatch(updateChart(studentData))
-                                dispatch(updateOpChart(studentData))
-                            }}
-                            id={students.indexOf(student) + 1}
-                            value={student}>
-                        </input>
-                        <Link to={`/StudentPage/${student}`}
-                            id={student}
-                            onClick={(event) => {
-                                dispatch(selectStudent(event.target.id))
-                                dispatch(updateChart(studentData))
-                            }}>
-                            {student}
-                        </Link>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="name"
+                                className="checkbox"
+                                checked={studentIsChecked(student)}
+                                onChange={(event) => {
+                                    dispatch(toggleStudent(event.target))
+                                    dispatch(updateChart(studentData))
+                                    dispatch(updateOpChart(studentData))
+                                }}
+                                id={students.indexOf(student) + 1}
+                                value={student}>
+                            </input>
+                            <span className='custom-checkbox'></span>
+                            <Link to={`/StudentPage/${student}`}
+                                id={student}
+                                onClick={(event) => {
+                                    dispatch(selectStudent(event.target.id))
+                                    dispatch(updateChart(studentData))
+                                }}>
+                                {student}
+                            </Link>
+                        </label>
                     </li>)
                 })}
             </ul>

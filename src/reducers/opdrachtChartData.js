@@ -128,7 +128,8 @@ const opdrachtChartData = (state = defaultState, action) => {
                 return tempState;
 
             }
-            break;
+
+            return state;
         default:
             return state;
     }

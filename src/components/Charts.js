@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, defaults } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import getStudentRatings from '../functions/getStudentRatings';
 import { setOpChartData, resetData } from '../actions';
 
+defaults.global.defaultFontFamily = "'Noto Sans', sans-serif";
+defaults.global.defaultFontColor = 'rgb(243, 246, 250)';
+
 const Charts = ({ data, table }) => {
+
 
     const dispatch = useDispatch();
     const database = useSelector(state => state.studentData);
@@ -32,9 +36,20 @@ const Charts = ({ data, table }) => {
                 </span>
                 <Bar
                     options={{
+                        responsive: true,
+                        legend: {
+                            align: "end",
+                            labels: {
+                                boxWidth: 15,
+                            }
+                        },
+                        tooltips: {
+                            backgroundColor: 'rgb(42, 24, 108)',
+                        },
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    maxTicksLimit: 6,
                                     beginAtZero: true
                                 }
                             }]
@@ -53,9 +68,20 @@ const Charts = ({ data, table }) => {
                 </span>
                 <Line
                     options={{
+                        responsive: true,
+                        legend: {
+                            align: "end",
+                            labels: {
+                                boxWidth: 15,
+                            }
+                        },
+                        tooltips: {
+                            backgroundColor: 'rgb(42, 24, 108)',
+                        },
                         scales: {
                             yAxes: [{
                                 ticks: {
+                                    maxTicksLimit: 6,
                                     beginAtZero: true
                                 }
                             }]
