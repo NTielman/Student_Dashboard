@@ -7,22 +7,26 @@ import getAverage from '../functions/getAverage';
 
 const OpdrachtPage = ({ match }) => {
 
-    const [labels, setLabels] = useState([]);
-    const [satisNums, setSatisNums] = useState([]);
-    const [diffiNums, setDiffiNums] = useState([]);
+    // const [labels, setLabels] = useState([]);
+    // const [satisNums, setSatisNums] = useState([]);
+    // const [diffiNums, setDiffiNums] = useState([]);
 
     const database = useSelector(state => state.studentData);
     const getOpChartData = useSelector(state => state.opdrachtChartData);
 
-    const setChartData = () => {
-        setLabels(getOpChartData.labels);
-        setSatisNums(getOpChartData.satisScore);
-        setDiffiNums(getOpChartData.diffiScore);
-    }
+    const labels = getOpChartData.labels;
+    const satisNums = getOpChartData.satisScore;
+    const diffiNums = getOpChartData.diffiScore;
 
-    useEffect(() => {
-        setChartData();
-    }, [getOpChartData]);
+    // const setChartData = () => {
+    //     setLabels(getOpChartData.labels);
+    //     setSatisNums(getOpChartData.satisScore);
+    //     setDiffiNums(getOpChartData.diffiScore);
+    // }
+
+    // useEffect(() => {
+    //     setChartData();
+    // }, [getOpChartData]);
 
     const barChartData = (canvas) => {
         const ctx = canvas.getContext('2d');
@@ -98,7 +102,7 @@ const OpdrachtPage = ({ match }) => {
                 rows.push(columns);
             } else {
                 const columns = {
-                    name: foundStudent.name,
+                    name: student,
                     diffiNum: '-',
                     satisNum: '-',
                     overallScore: '-',

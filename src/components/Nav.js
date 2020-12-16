@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectStudent, resetData, toggleStudent, updateChart, updateOpChart } from '../actions';
 
 const Nav = () => {
+    let history = useHistory();
+    const location = useLocation();
+
+    //checks if currentpage = home studentPage or Opdrachtpage
+    let currentPage = location.pathname.split('/')[1];
+
     const studentNames = useSelector(state => state.studentNames);
     const studentData = useSelector(state => state.studentData);
 
@@ -19,6 +25,14 @@ const Nav = () => {
     useEffect(() => {
         if (studentNames.length !== 0) {
             setStudents(studentNames)
+        }
+        return () => {
+            //takes user to homepage on page reload
+            /* this page receives data dynamically (onClick) 
+            from user interaction. To avoid seeing a blank page 
+            on page reload (no click event = no received data), 
+            redirect user to homepage */
+            history.push('/');
         }
     }, [studentNames]);
 
@@ -46,8 +60,11 @@ const Nav = () => {
                                 checked={studentIsChecked(student)}
                                 onChange={(event) => {
                                     dispatch(toggleStudent(event.target))
-                                    dispatch(updateChart(studentData))
-                                    dispatch(updateOpChart(studentData))
+                                    if (currentPage === 'OpdrachtPage') {
+                                        dispatch(updateOpChart(studentData))
+                                    } else {
+                                        dispatch(updateChart(studentData))
+                                    }
                                 }}
                                 id={students.indexOf(student) + 1}
                                 value={student}>

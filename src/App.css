@@ -42,7 +42,7 @@ nav {
 
 .student-list-item {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   padding: 5px;
   margin: 5px;
@@ -321,3 +321,5 @@ td {
   box-shadow: 2px -2px 8px rgba(0, 204, 187, 0.3),
   -2px 2px 8px rgba(0, 204, 187, 0.3);
   }
+
+  /* write changes for mobile i tablet */

@@ -7,21 +7,25 @@ import getAverage from '../functions/getAverage';
 
 const StudentPage = ({ match }) => {
 
-    const [labels, setLabels] = useState([]);
-    const [satisNums, setSatisNums] = useState([]);
-    const [diffiNums, setDiffiNums] = useState([]);
+    // const [labels, setLabels] = useState([]);
+    // const [satisNums, setSatisNums] = useState([]);
+    // const [diffiNums, setDiffiNums] = useState([]);
+
 
     const getChartData = useSelector(state => state.chartData);
 
-    const setChartData = () => {
-        setLabels(getChartData.labels);
-        setSatisNums(getChartData.satisScore);
-        setDiffiNums(getChartData.diffiScore);
-    }
+    const labels = getChartData.labels;
+    const satisNums = getChartData.satisScore;
+    const diffiNums = getChartData.diffiScore;
+    // const setChartData = () => {
+    //     setLabels(getChartData.labels);
+    //     setSatisNums(getChartData.satisScore);
+    //     setDiffiNums(getChartData.diffiScore);
+    // }
 
-    useEffect(() => {
-        setChartData();
-    }, [getChartData]);
+    // useEffect(() => {
+    //     setChartData();
+    // }, [getChartData])
 
     const barChartData = (canvas) => {
         const ctx = canvas.getContext('2d');
