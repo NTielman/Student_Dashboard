@@ -3,12 +3,20 @@ padding: 0px;
 margin: 0px;
 }
 
+html {
+  height: 100vh;
+}
+
 body {
  width: 100%;
- height: 100vh;
+ height: 100%;
+ margin: 0;
  font-family: 'Noto Sans', sans-serif;
- background-color: rgb(26, 15, 67);
+ background: linear-gradient(to bottom, rgb(26, 15, 67),rgb(12, 6, 34));
+ /* background-color: rgb(26, 15, 67); */
  color: rgb(243, 246, 250);
+ background-attachment: fixed;
+ background-repeat: no-repeat;
 }
 
 .dashboard-container {
@@ -16,7 +24,7 @@ body {
 }
 
 nav {
-  width: 20%;
+  width: 15%;
   margin: 20px;
   padding: 20px;
   border-radius: 15px;
@@ -41,7 +49,7 @@ nav {
 }
 
 .home-li {
-  align-self: center;
+  margin-left: 40px;
 }
 
 .checkbox {
@@ -110,13 +118,144 @@ a {
   cursor: pointer;
 }
 
+a:hover,
+.sort-menu li:hover,
+.sort-menu li i:hover {
+  color: rgb(244, 81, 126);
+}
+
 .middle-box {
   width: 100%;
 }
-/* .charts-container {
-  background-color: violet;
-  width: 50%;
 
+/* ------------- tooltip styling -------------- */
+.tooltiptext {
+  opacity: 0;
+  transition: opacity 1s;
+  font-size: 12px;
+  width: 100px;
+  text-align: left;
+  background-color: rgb(42, 24, 108);
+  border-radius: 8px;
+  padding: 6px;
+  line-height: 1.5em;
+  position: absolute;
+  z-index: 1;
+}
+
+/* tooltip arrow */
+.tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 100%; /* To the right of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgb(42, 24, 108);
+}
+
+/* positioning tooltips */
+.bar-tooltip .tooltiptext {
+  right: 92%;
+  top: -175%;
+}
+
+/* positioning tooltips */
+.line-tooltip .tooltiptext {
+  top: -150%;
+  right: 87%;
+}
+
+.bar-tooltip {
+  right: 20%;
+}
+
+.chart-tooltip {
+  height: 5px;
+  width: 300px;
+  position: absolute;
+  z-index: 2;
+}
+
+.bottom-bar {
+  height: 5px;
+  width: 300px;
+  position: absolute;
+  z-index: 3;
+  top: 500%;
+}
+
+.line-tooltip {
+  right: 47%;
+}
+
+.bottom-bar:hover  ~ .tooltiptext,
+.chart-tooltip:hover .tooltiptext {
+  opacity: 1;
+}
+
+
+.bar-chart {
+  margin: 20px;
+  margin-left: 0px;
+  padding: 20px;
+  border-radius: 15px;
+  height: 480px;
+  background-color: rgb(30, 16, 75);
+}
+
+.bottom-charts {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.line-chart,
+.table-container {
+  background-color: rgb(30, 16, 75);
+  margin: 0px 20px 20px 0px;
+  padding: 20px;
+  border-radius: 15px;
+  height: 240px;
+}
+
+.line-chart {
+  width: 55%;
+  overflow: scroll;
+}
+
+.table-container {
+  overflow: scroll;
+  width: 35%;
+}
+
+table {
+  font-size: 14px;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: rgb(42, 24, 108);
+}
+
+thead th:nth-child(1) {
+  border-radius: 15px 0px 0px 0px;
+}
+
+thead th:nth-child(4) {
+  border-radius: 0px 15px 0px 0px;
+}
+
+th,
+td {
+  padding: 6px;
+  text-align: left;
+  width: 25%;
+}
+
+/* tbody tr:hover {
+  background-color: rgb(244, 81, 127);
 } */
 
 .sidebar {
@@ -128,7 +267,8 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: space-evenly; */
+  text-align: center;
+  /* justify-content: center; */
   background-color: rgb(30, 16, 75);
 }
 

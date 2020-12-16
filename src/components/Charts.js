@@ -8,7 +8,7 @@ import { setOpChartData, resetData } from '../actions';
 defaults.global.defaultFontFamily = "'Noto Sans', sans-serif";
 defaults.global.defaultFontColor = 'rgb(243, 246, 250)';
 
-const Charts = ({ data, table }) => {
+const Charts = ({ barData, lineData, table }) => {
 
 
     const dispatch = useDispatch();
@@ -29,11 +29,12 @@ const Charts = ({ data, table }) => {
     return (
         <div className='charts-container'>
             <div className='bar-chart'>
-                <span className="chart-tooltip bar-tooltip">
+                <div className="chart-tooltip bar-tooltip">
+                    <div className='bottom-bar'></div>
                     <span className="tooltiptext">
                         click to filter out a metric
                     </span>
-                </span>
+                </div>
                 <Bar
                     options={{
                         responsive: true,
@@ -55,85 +56,92 @@ const Charts = ({ data, table }) => {
                             }]
                         }
                     }}
-                    data={data}
+                    data={barData}
                     width={400}
                     height={200} />
             </div>
 
-            <div className='line-chart'>
-                <span className="chart-tooltip line-tooltip">
-                    <span className="tooltiptext">
-                        click to filter out a metric
+            <div className='bottom-charts'>
+                <div className='line-chart'>
+                    <div className="chart-tooltip line-tooltip">
+                        <span className="tooltiptext">
+                            click to filter out a metric
                     </span>
-                </span>
-                <Line
-                    options={{
-                        responsive: true,
-                        legend: {
-                            align: "end",
-                            labels: {
-                                boxWidth: 15,
-                            }
-                        },
-                        tooltips: {
-                            backgroundColor: 'rgb(42, 24, 108)',
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    maxTicksLimit: 6,
-                                    beginAtZero: true
+                    </div>
+                    <Line
+                        options={{
+                            responsive: true,
+                            legend: {
+                                align: "end",
+                                labels: {
+                                    boxWidth: 15,
                                 }
-                            }]
-                        }
-                    }}
-                    data={data}
-                    width={250}
-                    height={100} />
-            </div>
-
-            <div className='table-container'>
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>difficulty score:</th>
-                            <th>satisfaction score:</th>
-                            <th>overall score:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {table.map(row => {
-                            if (row.title !== undefined) {
-                                return (
-                                    <tr key={row.title}>
-                                        <th onClick={() => {
-                                            dispatch(resetData())
-                                            getChartData(row.title)
-                                        }}>
-                                            <Link to={`/OpdrachtPage/${row.title}`}>
-                                                {row.title}
-                                            </Link>
-                                        </th>
-                                        <td>{row.diffiNum}</td>
-                                        <td>{row.satisNum}</td>
-                                        <td>{row.overallScore}</td>
-                                    </tr>
-                                )
-                            } else {
-                                return (
-                                    <tr key={row.id}>
-                                        <th>{row.name}</th>
-                                        <td>{row.diffiNum}</td>
-                                        <td>{row.satisNum}</td>
-                                        <td>{row.overallScore}</td>
-                                    </tr>
-                                )
+                            },
+                            tooltips: {
+                                backgroundColor: 'rgb(42, 24, 108)',
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        maxTicksLimit: 6,
+                                        beginAtZero: true
+                                    }
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        autoSkip: true,
+                                    }
+                                }]
                             }
+                        }}
+                        data={lineData}
+                        width={400}
+                        height={250} />
+                </div>
 
-                        })}
-                    </tbody>
-                </table>
+                <div className='table-container'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>difficulty score:</th>
+                                <th>satisfaction score:</th>
+                                <th>overall score:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {table.map(row => {
+                                if (row.title !== undefined) {
+                                    return (
+                                        <tr key={row.title}>
+                                            <th onClick={() => {
+                                                dispatch(resetData())
+                                                getChartData(row.title)
+                                            }}>
+                                                <Link to={`/OpdrachtPage/${row.title}`}>
+                                                    {row.title}
+                                                </Link>
+                                            </th>
+                                            <td>{row.diffiNum}</td>
+                                            <td>{row.satisNum}</td>
+                                            <td>{row.overallScore}</td>
+                                        </tr>
+                                    )
+                                } else {
+                                    return (
+                                        <tr key={row.id}>
+                                            <th>{row.name}</th>
+                                            <td>{row.diffiNum}</td>
+                                            <td>{row.satisNum}</td>
+                                            <td>{row.overallScore}</td>
+                                        </tr>
+                                    )
+                                }
+
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
