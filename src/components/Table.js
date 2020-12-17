@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import getStudentRatings from '../functions/getStudentRatings';
-import { setOpChartData, resetData } from '../actions';
+import { setOpdrChartData, resetData } from '../actions';
 import { useLocation } from 'react-router-dom';
 import getAverage from '../functions/getAverage';
 
@@ -13,7 +13,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
     let currentPage = location.pathname.split('/')[1];
 
     const dispatch = useDispatch();
-    const database = useSelector(state => state.studentData);
+    const database = useSelector(state => state.database);
 
     //generates data to display in table
     const tableData = () => {
@@ -65,7 +65,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
         });
 
         //update state with opdracht data
-        dispatch(setOpChartData(selectedOpdracht));
+        dispatch(setOpdrChartData(selectedOpdracht));
     };
 
 

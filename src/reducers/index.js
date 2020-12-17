@@ -1,15 +1,14 @@
 import { combineReducers } from 'redux';
-import studentData from './studentData';
+import database from './database';
 import studentNames from './studentNames';
 import chartData from './chartData';
 import opdrachtChartData from './opdrachtChartData';
 
 const rootReducer = combineReducers({
-    studentData,
+    database,
     studentNames,
     chartData,
     opdrachtChartData
-
 });
 
 export default rootReducer;

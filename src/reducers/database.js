@@ -1,11 +1,10 @@
-const studentData = (state = [], action) => {
+const database = (state = [], action) => {
 
     switch (action.type) {
 
-        //sets initial state
         case 'SET-DATA':
 
-            //get data from fetch
+            //get fetched data
             const database = action.payload;
 
             //update state
@@ -32,20 +31,26 @@ const studentData = (state = [], action) => {
 
         case 'TOGGLE-STUDENT':
 
-            //get checked/unchecked student
+            //get selected student
             const { value } = action.payload;
+
+            //find student in database
             const foundStudent = state.find(student => student.name === value);
+
+            //check/uncheck student
             foundStudent.isActive = !foundStudent.isActive;
 
-            const copyState = state.map(student => {
+            //copy state and add updated student 
+            const newState = state.map(student => {
                 if (student.name !== value) {
                     return student;
                 } else {
                     return foundStudent;
                 }
             });
+
             //update state
-            return copyState;
+            return newState;
 
         case 'RESET-DATA':
 
@@ -59,9 +64,10 @@ const studentData = (state = [], action) => {
             return resetState;
 
         default:
+
             return state;
     }
 
 }
 
-export default studentData;
+export default database;

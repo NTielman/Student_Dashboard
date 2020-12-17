@@ -1,19 +1,23 @@
-//returns student ratings for a specific opdracht and metric (difficulty | satisfaction)
+/* -------- returns student ratings for a specific opdracht and metric -------- */
 const getStudentRatings = (database, opdrachtTitle, metric) => {
+
+    //will hold student ratings
     const ratings = [];
 
-    database.forEach(studentObj => {
+    database.forEach(student => {
 
-        //check if student is selected/ should be included
-        if (studentObj.isActive) {
+        //if student is checked include student score
+        if (student.isActive) {
 
             //find specific opdracht
-            const opdracht = studentObj.data.find(opdr => opdr.title === opdrachtTitle);
+            const opdracht = student.scores.find(opdr => opdr.title === opdrachtTitle);
 
-            //find metric info of opdracht difficultyNumber | satisfactionNumber
-            const metricNum = opdracht[metric];
-            ratings.push(metricNum);
-        } else {
+            //find metric info (difficultyScore | satisfactionScore) of opdracht 
+            const metricScore = opdracht[metric];
+            ratings.push(metricScore);
+
+        } else { //if student is unchecked, student score = ''
+
             ratings.push('');
         }
 

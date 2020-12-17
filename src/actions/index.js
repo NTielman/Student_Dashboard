@@ -1,67 +1,41 @@
-/* usedBy: App.js */
-// sets initial data (state)
-export const setData = (studentData) => {
+/* action usedBy: App | affected reducer: database  */
+// action to set initial database
+export const setDatabase = (studentData) => {
     return {
         type: 'SET-DATA',
         payload: studentData,
     }
 }
 
-/* usedBy: App.js */
-// sets initial students (state)
-export const setStudents = (studentNames) => {
+/* action usedBy: App | affected reducer: studentNames  */
+// action to set initial student array
+export const setStudents = (students) => {
     return {
         type: 'SET-STUDENTS',
-        payload: studentNames,
+        payload: students,
     }
 }
 
-/* usedBy: Nav.js */
-// for homepage resets dta to include all students
-export const resetData = () => {
-    return {
-        type: 'RESET-DATA'
-    }
-}
-
-/* usedBy: Nav.js */
-// displays only selected student info
-export const selectStudent = (studentName) => {
-    return {
-        type: 'SELECTED-STUDENT',
-        payload: studentName,
-    }
-}
-
-/* usedBy: Nav.js */
-// includes/ excludes student data from charts
-export const toggleStudent = (student) => {
-    return {
-        type: 'TOGGLE-STUDENT',
-        payload: student,
-    }
-}
-
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
-export const setChartData = (assignments) => {
+/* action usedBy: App | affected reducer: chartData  */
+// action to set chart labels and data
+export const setChartData = (dataArray) => {
     return {
         type: 'SET-CHART-DATA',
-        payload: assignments,
+        payload: dataArray,
     }
 }
 
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
-export const sortChart = (param) => {
+/* action usedBy: App, Table | affected reducer: opdrachtChartData  */
+// action to set opdrachtChart labels and data
+export const setOpdrChartData = (dataArray) => {
     return {
-        type: 'SORT-CHART',
-        payload: param,
+        type: 'SET-OPDRACHT-CHART-DATA',
+        payload: dataArray,
     }
 }
 
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
+/* action usedBy: Nav | affected reducer: chartData  */
+// action to update chart labels and data (on student toggle etc.)
 export const updateChart = (database) => {
     return {
         type: 'UPDATE-CHART',
@@ -69,29 +43,55 @@ export const updateChart = (database) => {
     }
 }
 
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
-export const setOpChartData = (assignments) => {
+/* action usedBy: Nav | affected reducer: opdrachtChartData  */
+// action to update opdrachtChart labels and data (on student toggle)
+export const updateOpdrChart = (database) => {
     return {
-        type: 'SET-OPDRACHT-CHART-DATA',
-        payload: assignments,
+        type: 'UPDATE-OPDRACHT-CHART',
+        payload: database,
     }
 }
 
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
-export const sortOpChart = (param) => {
+/* action usedBy: Nav | affected reducer: database  */
+// action to uncheck all students except selectedStudent
+export const selectStudent = (studentName) => {
+    return {
+        type: 'SELECTED-STUDENT',
+        payload: studentName,
+    }
+}
+
+/* action usedBy: Nav | affected reducer: database  */
+// action to check or uncheck a student (include | exclude student data from charts)
+export const toggleStudent = (student) => {
+    return {
+        type: 'TOGGLE-STUDENT',
+        payload: student,
+    }
+}
+
+/* action usedBy: SortMenu | affected reducer: chartData  */
+// action to sort chart by selected parameter
+export const sortChart = (param) => {
+    return {
+        type: 'SORT-CHART',
+        payload: param,
+    }
+}
+
+/* action usedBy: SortMenu | affected reducer: opdrachtChartData  */
+// action to sort opdrachtChart by selected parameter
+export const sortOpdrChart = (param) => {
     return {
         type: 'SORT-OPDRACHT-CHART',
         payload: param,
     }
 }
 
-/* usedBy: App.js */
-// sets initial assignments and projects (state)
-export const updateOpChart = (database) => {
+/* action usedBy: Nav, Table | affected reducer: database  */
+// action to reset database (checks all students, includes all student data)
+export const resetData = () => {
     return {
-        type: 'UPDATE-OPDRACHT-CHART',
-        payload: database,
+        type: 'RESET-DATA'
     }
 }

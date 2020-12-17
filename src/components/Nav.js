@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectStudent, resetData, toggleStudent, updateChart, updateOpChart } from '../actions';
+import { selectStudent, resetData, toggleStudent, updateChart, updateOpdrChart } from '../actions';
 
 const Nav = () => {
     let history = useHistory();
@@ -11,11 +11,11 @@ const Nav = () => {
     let currentPage = location.pathname.split('/')[1];
 
     const studentNames = useSelector(state => state.studentNames);
-    const studentData = useSelector(state => state.studentData);
+    const database = useSelector(state => state.database);
 
     //checks if student checkbox is checked
     const studentIsChecked = name => {
-        const foundStudent = studentData.find(student => student.name === name);
+        const foundStudent = database.find(student => student.name === name);
         return foundStudent.isActive;
     };
 
@@ -43,7 +43,7 @@ const Nav = () => {
                     <Link to='/'
                         onClick={() => {
                             dispatch(resetData())
-                            dispatch(updateChart(studentData))
+                            dispatch(updateChart(database))
                         }}>
                         Home
                     </Link>
@@ -61,9 +61,9 @@ const Nav = () => {
                                 onChange={(event) => {
                                     dispatch(toggleStudent(event.target))
                                     if (currentPage === 'OpdrachtPage') {
-                                        dispatch(updateOpChart(studentData))
+                                        dispatch(updateOpdrChart(database))
                                     } else {
-                                        dispatch(updateChart(studentData))
+                                        dispatch(updateChart(database))
                                     }
                                 }}
                                 id={students.indexOf(student) + 1}
@@ -74,7 +74,7 @@ const Nav = () => {
                                 id={student}
                                 onClick={(event) => {
                                     dispatch(selectStudent(event.target.id))
-                                    dispatch(updateChart(studentData))
+                                    dispatch(updateChart(database))
                                 }}>
                                 {student}
                             </Link>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { sortChart, sortOpChart } from '../actions';
+import { sortChart, sortOpdrChart } from '../actions';
 import { useLocation } from 'react-router-dom';
 
 const SortMenu = () => {
@@ -12,7 +12,7 @@ const SortMenu = () => {
 
     const handleClick = (metric) => {
         if (currentPage === 'OpdrachtPage') {
-            dispatch(sortOpChart(metric))
+            dispatch(sortOpdrChart(metric))
         } else {
             dispatch(sortChart(metric))
         }

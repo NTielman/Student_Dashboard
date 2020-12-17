@@ -1,7 +1,8 @@
-//returns average from an array of numbers
-const getAverage = (array) => {
+/* -------- returns the average (gemiddelde) from an array of numbers -------- */
+const getAverage = (numbersArray) => {
 
-    const filteredArr = array.filter(num => num !== '');
+    //(if student is unchecked, score = ''), filter out uncheckedStudent scores
+    const filteredArr = numbersArray.filter(score => score !== '');
 
     //check if received array is not empty
     if (filteredArr.length !== 0) {
@@ -11,6 +12,7 @@ const getAverage = (array) => {
         //divide total by amount of numbers in array
         const average = total / filteredArr.length;
 
+        //round average to 2 decimals if necessary
         return Math.floor(average * 100) / 100;
     }
 

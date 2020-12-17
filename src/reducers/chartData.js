@@ -1,5 +1,6 @@
 import getStudentRatings from '../functions/getStudentRatings';
 import getAverage from '../functions/getAverage';
+import sorter from '../functions/sorter';
 
 const defaultState = {
     labels: [],
@@ -12,10 +13,9 @@ const chartData = (state = defaultState, action) => {
 
     switch (action.type) {
 
-        //sets initial state
         case 'SET-CHART-DATA':
 
-            //get data from fetch
+            //get fetched data 
             const data = action.payload;
 
             //update state
@@ -23,98 +23,43 @@ const chartData = (state = defaultState, action) => {
 
         case 'SORT-CHART':
 
+            //get parameter to sort chart by (difficulty, satisfaction, label)
             const param = action.payload;
 
-            //make copy of state
-            const stateDupli = state;
-            const objArray = [];
+            //sort labels and data
+            const sortedState = sorter(param, state);
 
-            //sorts from A-Z a-z 1-5
-            const sortDown = (itemA, itemB) => {
+            return sortedState;
 
-                if (itemA < itemB) {
-                    return -1;
-                }
-                if (itemA > itemB) {
-                    return 1;
-                }
-                return 0;
-            };
-
-            //sorts from Z-A z-a 5-1
-            const sortUp = (itemA, itemB) => {
-
-                if (itemA > itemB) {
-                    return -1;
-                }
-                if (itemA < itemB) {
-                    return 1;
-                }
-                return 0;
-            };
-
-            //make object out of arrays
-            stateDupli.labels.forEach(label => {
-                const index = stateDupli.labels.indexOf(label);
-                const obj = {
-                    label: label,
-                    diffiScore: stateDupli.diffiScore[index],
-                    satisScore: stateDupli.satisScore[index]
-                };
-                objArray.push(obj);
-            });
-
-            //sort array by parameter
-            objArray.sort((a, b) => {
-                const numA = a[param];
-                const numB = b[param];
-
-                if (state.sortDirection) {
-                    return sortDown(numA, numB);
-                } else {
-                    return sortUp(numA, numB);
-                }
-
-            });
-
-            //deconstruct array of objects into object of arrays
-            const sortedLabels = [];
-            const sortedDiffs = [];
-            const sortedSats = [];
-
-            objArray.forEach(obj => {
-                sortedLabels.push(obj.label);
-                sortedDiffs.push(obj.diffiScore);
-                sortedSats.push(obj.satisScore)
-            });
-
-            return {
-                labels: sortedLabels,
-                diffiScore: sortedDiffs,
-                satisScore: sortedSats,
-                sortDirection: !state.sortDirection
-            }
         case 'UPDATE-CHART':
 
+            //get data from  database
             const database = action.payload;
-            let tempState = state;
+
+            //make copy of state
+            let prevState = state;
+
             const metrics = ['diffiScore', 'satisScore'];
-
-            //generates array of data to be sent to charts
             metrics.forEach(metric => {
-                const numberArray = [];
+                //will hold average difficultyScores | satisfactionScores for each opdracht 
+                const updatedScores = [];
 
+                //get average difficultyScore | satisfactionScore for each opdracht
                 state.labels.forEach(opdracht => {
-                    //get average per opdracht
-                    const average = getAverage(getStudentRatings(database, opdracht, metric));
-                    numberArray.push(average);
+                    //get all studentRatings for the opdracht, then get average of studentRatings
+                    const averageScore = getAverage(getStudentRatings(database, opdracht, metric));
+                    updatedScores.push(averageScore);
                 });
-                tempState = { ...tempState, [metric]: numberArray };
+
+                //add updatedScores to copy of state
+                prevState = { ...prevState, [metric]: updatedScores };
             });
 
-            return tempState;
+            //update state with new scores
+            return prevState;
 
         default:
+
             return state;
     }
 
