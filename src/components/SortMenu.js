@@ -10,35 +10,28 @@ const SortMenu = () => {
     //checks if currentpage = home studentPage or Opdrachtpage
     let currentPage = location.pathname.split('/')[1];
 
+    const handleClick = (metric) => {
+        if (currentPage === 'OpdrachtPage') {
+            dispatch(sortOpChart(metric))
+        } else {
+            dispatch(sortChart(metric))
+        }
+    };
+
     return (
         <div className='sort-menu-container'>
             <ul className="sort-menu">
                 <p>Sort By:</p>
                 <li
-                    onClick={() => {
-                        if (currentPage === 'OpdrachtPage') {
-                            dispatch(sortOpChart('diffiScore'))
-                        } else {
-                            dispatch(sortChart('diffiScore'))
-                        }
-                    }}>difficulty <i className="fas fa-sort-amount-down-alt"></i>
+                    onClick={() => { handleClick('diffiScore') }}>
+                    difficulty <i className="fas fa-sort-amount-down-alt"></i>
                 </li>
                 <li
-                    onClick={() => {
-                        if (currentPage === 'OpdrachtPage') {
-                            dispatch(sortOpChart('satisScore'))
-                        } else {
-                            dispatch(sortChart('satisScore'))
-                        }
-                    }}>satisfaction <i className="fas fa-sort-amount-down-alt"></i>
+                    onClick={() => { handleClick('satisScore') }}>
+                    satisfaction <i className="fas fa-sort-amount-down-alt"></i>
                 </li>
-                <li onClick={() => {
-                    if (currentPage === 'OpdrachtPage') {
-                        dispatch(sortOpChart('label'))
-                    } else {
-                        dispatch(sortChart('label'))
-                    }
-                }}>name/ title <i className="fas fa-sort-alpha-down"></i>
+                <li onClick={() => { handleClick('label') }}>
+                    name/ title <i className="fas fa-sort-alpha-down"></i>
                 </li>
             </ul>
         </div>

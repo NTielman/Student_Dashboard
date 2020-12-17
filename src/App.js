@@ -16,7 +16,7 @@ function App() {
       const response = await fetch('/Data/student-data.csv');
       const data = await response.text();
 
-      //initialise empty arrays to hold data info
+      //declare and initialise empty arrays to hold data info
       const studentNames = [];
       const labels = [];
       const database = [];
@@ -28,20 +28,20 @@ function App() {
         //split each row value by comma
         const column = value.split(',');
 
-        const student = column[0];
+        const studentName = column[0];
         const opdrTitle = column[1];
         const difficulty = parseInt(column[2]);
         const satisfying = parseInt(column[3]);
         const studentObj = {
-          name: student, //Evelyn
-          isActive: true, //sets student checkbox as checked
+          name: studentName, //Evelyn
+          isActive: true, //student checkbox is checked
           data: [{ title: opdrTitle, diffiScore: difficulty, satisScore: satisfying }],
           id: database.length + 1 //sets student id 
         };
 
         //if studentarray doesn't include student yet, add student 
-        if (!studentNames.includes(student)) {
-          studentNames.push(student);
+        if (!studentNames.includes(studentName)) {
+          studentNames.push(studentName);
         }
 
         //if opdrachtenLijst doesn't include opdracht yet, add opdracht 
@@ -50,10 +50,10 @@ function App() {
         }
 
         //checks if database already includes studentObject
-        if (database.find(obj => obj.name === student)) {
+        if (database.find(student => student.name === studentName)) {
 
           //find student obj
-          const foundStudent = database.find(obj => obj.name === student);
+          const foundStudent = database.find(student => student.name === studentName);
 
           //make copy of student projects data
           const copyData = foundStudent.data;
@@ -69,6 +69,8 @@ function App() {
 
       });
 
+      //initialise object with opdr Titles
+      const chartData = { labels };
       const metrics = ['diffiScore', 'satisScore'];
 
       //generates array of data to be sent to charts
@@ -79,13 +81,13 @@ function App() {
           //get average per opdracht
           const average = getAverage(getStudentRatings(database, opdracht, metric));
           numberArray.push(average);
-
         });
-        dispatch(setChartData({ [metric]: numberArray }));
+
+        chartData[metric] = numberArray;
       });
 
       //send data to reducers to initialise state
-      dispatch(setChartData({ labels }));
+      dispatch(setChartData(chartData));
       dispatch(setStudents(studentNames));
       dispatch(setData(database));
       dispatch(setOpChartData({ labels: studentNames }));

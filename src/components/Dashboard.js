@@ -1,6 +1,6 @@
 import React from 'react';
-import HomePage from "./HomePage";
 import Nav from "./Nav";
+import HomePage from "./HomePage";
 import StudentPage from "./StudentPage";
 import OpdrachtPage from './OpdrachtPage';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";

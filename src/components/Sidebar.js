@@ -1,7 +1,38 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, defaults } from 'react-chartjs-2';
+import getAverage from '../functions/getAverage';
 
-const Sidebar = ({ data, chart }) => {
+//sets default font family and color of chart
+defaults.global.defaultFontFamily = "'Noto Sans', sans-serif";
+defaults.global.defaultFontColor = 'rgb(243, 246, 250)';
+
+const Sidebar = ({ data, diffiNums, satisNums }) => {
+
+    const chart = (canvas) => {
+        const ctx = canvas.getContext('2d');
+        let diffiGradient = ctx.createLinearGradient(20, 0, 180, 0);
+        diffiGradient.addColorStop(1, 'rgb(0, 204, 188)');
+        diffiGradient.addColorStop(0, 'rgb(97, 24, 152)');
+
+        let satisGradient = ctx.createLinearGradient(180, 0, 20, 0);
+        satisGradient.addColorStop(1, 'rgb(244, 81, 126)');
+        satisGradient.addColorStop(.3, 'rgb(97, 24, 152)');
+        satisGradient.addColorStop(0, ' rgb(26, 15, 67)');
+
+        return {
+            labels: ['satisfaction', 'difficulty'],
+            datasets: [{
+                label: 'overall satisfaction score',
+                data: [
+                    getAverage(satisNums),
+                    getAverage(diffiNums)
+                ],
+                borderColor: 'rgb(26, 15, 67)',
+                backgroundColor: [satisGradient,
+                    diffiGradient]
+            }]
+        }
+    }
 
     return (
         <div className='sidebar'>

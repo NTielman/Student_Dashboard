@@ -24,7 +24,7 @@ const Nav = () => {
 
     useEffect(() => {
         if (studentNames.length !== 0) {
-            setStudents(studentNames)
+            setStudents(studentNames);
         }
         return () => {
             //takes user to homepage on page reload
