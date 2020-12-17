@@ -1,31 +1,34 @@
+/* -------------- Renders a table -------------- */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import getStudentRatings from '../functions/getStudentRatings';
 import { setOpdrChartData, resetData } from '../actions';
-import { useLocation } from 'react-router-dom';
+import getStudentRatings from '../functions/getStudentRatings';
 import getAverage from '../functions/getAverage';
 
 const Table = ({ labels, diffiNums, satisNums }) => {
 
-    //checks if currentpage = home studentPage or Opdrachtpage
+    const dispatch = useDispatch();
     const location = useLocation();
+
+    //checks if currentpage = homePage, studentPage or Opdrachtpage
     let currentPage = location.pathname.split('/')[1];
 
-    const dispatch = useDispatch();
-    const database = useSelector(state => state.database);
-
-    //generates data to display in table
     const tableData = () => {
+
+        //will hold tableData objects for each row
         const rows = [];
 
+        /* to ensure labels match up with the correct data 
+        convert all array elements into objects */
         labels.forEach(label => {
+
             const index = labels.indexOf(label);
             let averageDiff = diffiNums[index];
             let averageSatis = satisNums[index];
             let overallScore = getAverage([averageDiff, averageSatis]);
 
-            //if undefined, null or empty assign value = '-'
+            //if any dataValues are undefined or null, value = '-'
             if (!overallScore) {
                 overallScore = '-';
             }
@@ -52,26 +55,31 @@ const Table = ({ labels, diffiNums, satisNums }) => {
         return rows;
     };
 
-    //retreives opdracht data to be displayed on opdrachtPage
+    //onClick retreives opdracht scores from database and sets opdrachtChart state
+    const database = useSelector(state => state.database);
     const handleClick = (opdracht) => {
-        //initialise object with opdr Title
+
+        //create opdrachtObject to hold opdracht data
         const selectedOpdracht = { opdracht };
 
         const metrics = ['satisScore', 'diffiScore'];
         metrics.forEach(metric => {
+
             //get student ratings per metric
             const ratings = getStudentRatings(database, opdracht, metric);
+
+            //add ratings to opdrachtObject
             selectedOpdracht[metric] = ratings;
         });
 
-        //update state with opdracht data
+        //update opdrachtChart state with selected opdracht data
         dispatch(setOpdrChartData(selectedOpdracht));
     };
-
 
     return (
         <div className='table-container'>
             <table>
+
                 <thead>
                     <tr>
                         <th></th>
@@ -80,6 +88,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
                         <th>overall score:</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {tableData().map(row => {
                         /*if currentPage = homepage or studentPage
@@ -88,8 +97,8 @@ const Table = ({ labels, diffiNums, satisNums }) => {
                             return (
                                 <tr key={row.id}>
                                     <th onClick={() => {
-                                        dispatch(resetData())
-                                        handleClick(row.title)
+                                        dispatch(resetData()) //reselects all students
+                                        handleClick(row.title) //retreives data to display on opdrachtPage
                                     }}>
                                         <Link to={`/OpdrachtPage/${row.title}`}>
                                             {row.title}
@@ -115,6 +124,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
 
                     })}
                 </tbody>
+
             </table>
         </div>
     );

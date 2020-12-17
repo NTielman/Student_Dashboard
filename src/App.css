@@ -40,7 +40,7 @@ nav {
   width: 90%;
 }
 
-.student-list-item {
+.nav-listItem {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -48,7 +48,7 @@ nav {
   margin: 5px;
 }
 
-.home-li {
+.home-listItem {
   margin-left: 40px;
 }
 
@@ -156,42 +156,19 @@ a:hover,
 }
 
 /* positioning tooltips */
-.bar-tooltip .tooltiptext {
-  right: 92%;
-  top: -175%;
+.bar-chart .tooltiptext {
+  right: 37%;
+  top: 22.5%;
 }
 
 /* positioning tooltips */
-.line-tooltip .tooltiptext {
-  top: -150%;
-  right: 87%;
+.line-chart .tooltiptext {
+  bottom: -43%;
+  left: 24.5%;
 }
 
-.bar-tooltip {
-  right: 20%;
-}
-
-.chart-tooltip {
-  height: 5px;
-  width: 300px;
-  position: absolute;
-  z-index: 2;
-}
-
-.bottom-bar {
-  height: 5px;
-  width: 300px;
-  position: absolute;
-  z-index: 3;
-  top: 500%;
-}
-
-.line-tooltip {
-  right: 47%;
-}
-
-.bottom-bar:hover  ~ .tooltiptext,
-.chart-tooltip:hover .tooltiptext {
+.line-chart:hover .tooltiptext,
+.bar-chart:hover .tooltiptext {
   opacity: 1;
 }
 
@@ -299,14 +276,14 @@ td {
   width: 80%;
 }
 
-.satisfaction-labels {
+.custom-labels {
   padding: 10px 10px;
   display: flex;
   justify-content: space-between;
   font-size: 30px;
 }
 
-.satisfaction-labels .fas {
+.custom-labels .fas {
   color:rgb(244, 81, 126);
   background-color: rgba(244, 81, 127, 0.3);
   border-radius: 100%;
@@ -314,7 +291,7 @@ td {
   -2px 2px 8px rgba(244, 81, 127, 0.3);
 }
 
-.satisfaction-labels .far {
+.custom-labels .far {
   color: rgb(0, 204, 188);
   border-radius: 100%;
   background-color: rgba(0, 204, 187, 0.3);

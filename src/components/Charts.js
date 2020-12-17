@@ -1,3 +1,4 @@
+/* -------------- Displays charts and Tables -------------- */
 import React from 'react';
 import Bar from './Bar';
 import Line from './Line';

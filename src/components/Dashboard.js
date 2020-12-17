@@ -1,3 +1,4 @@
+/* -------------- Displays dashboard components layout and routes between components -------------- */
 import React from 'react';
 import Nav from "./Nav";
 import HomePage from "./HomePage";
