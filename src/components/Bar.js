@@ -58,7 +58,7 @@ const BarChart = ({ labels, diffiNums, satisNums }) => {
         <div className='bar-chart'>
 
             <span className="tooltiptext">
-                click to filter out a metric
+                Click on a legend box or label to toggle a chart metric on/off
             </span>
 
             <Bar
@@ -83,7 +83,7 @@ const BarChart = ({ labels, diffiNums, satisNums }) => {
                     }
                 }}
                 data={barData}
-                width={400}
+                width={380}
                 height={200} />
         </div>
     );

@@ -59,7 +59,7 @@ const LineChart = ({ labels, diffiNums, satisNums }) => {
         <div className='line-chart'>
 
             <span className="tooltiptext">
-                click to filter out a metric
+                Click on a legend box or label to toggle a chart metric on/off
             </span>
 
             <Line
