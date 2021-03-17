@@ -241,7 +241,7 @@ td {
   background-size: cover;
   background-position: 0px -190px;
   background-blend-mode: lighten;
-  background-image: url(https://www.pngitem.com/pimgs/m/375-3757223_free-icon-download-people-avatar-icon-transparent-background.png);
+  background-image: url(images/avatar_placeholder.png);
   box-shadow: 5px -5px 8px rgba(244, 81, 127, 0.5),
   -5px 5px 8px rgba(0, 204, 187, 0.5);
 }

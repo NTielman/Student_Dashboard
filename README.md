@@ -25,7 +25,7 @@ A dashboard that displays student satisfaction numbers.
 
 
 ## Live Demo 
-https://hardcore-thompson-95495f.netlify.app
+https://eloquent-darwin-440c3c.netlify.app
 
 
 ## Usage & Details 
