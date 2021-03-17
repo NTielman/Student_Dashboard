@@ -9,23 +9,20 @@ defaults.global.defaultFontColor = 'rgb(243, 246, 250)';
 
 const LineChart = ({ labels, diffiNums, satisNums }) => {
 
-    //checks if currentpage = homePage, studentPage or Opdrachtpage
     const location = useLocation();
     let currentPage = location.pathname.split('/')[1];
 
     const lineData = (canvas) => {
 
         const ctx = canvas.getContext('2d');
-
-        //declare gradient variables
         let diffiGradient;
         let satisGradient;
 
-        //create and initialise linear gradients
-        if (currentPage === 'OpdrachtPage') {
+        //create linear gradients
+        if (currentPage === 'AssignmentPage') {
             diffiGradient = ctx.createLinearGradient(0, 190, 0, 500);
             satisGradient = ctx.createLinearGradient(0, 200, 0, 400);
-        } else { //if currentpage = homepage or studentpage use below gradients
+        } else {
             diffiGradient = ctx.createLinearGradient(0, 90, 0, 400);
             satisGradient = ctx.createLinearGradient(0, 90, 0, 400);
         }
@@ -39,17 +36,16 @@ const LineChart = ({ labels, diffiNums, satisNums }) => {
         satisGradient.addColorStop(.3, 'rgba(97, 24, 152, 0.5)'); //mid: semiTransparent Purple
         satisGradient.addColorStop(1, ' rgba(26, 15, 67, 0)'); //bottom: transparent DarkBlue
 
-        //return data to be charted
         return {
-            labels, //x-axis labels: opdrachtenlijst or studentlist
+            labels, //x-axis labels: asignmentlist or studentlist
             datasets: [{
                 label: 'difficulty score',
-                data: diffiNums, //array of dificultyScores 
+                data: diffiNums,
                 backgroundColor: diffiGradient //opaque blue to transparent purple background color
             },
             {
                 label: 'satisfaction score',
-                data: satisNums, //array of satisfactionScores 
+                data: satisNums,
                 backgroundColor: satisGradient //opaque pink to transparent darkblue
             }]
         }
@@ -66,9 +62,9 @@ const LineChart = ({ labels, diffiNums, satisNums }) => {
                 options={{
                     responsive: true, //chart size responsive to window resizing etc.
                     legend: {
-                        align: "end", //aligns Legenda right 
+                        align: "end", //aligns Legend right 
                         labels: {
-                            boxWidth: 15, //sets width of Legenda colorbox
+                            boxWidth: 15, //sets width of Legend colorbox
                         }
                     },
                     tooltips: {
@@ -90,7 +86,7 @@ const LineChart = ({ labels, diffiNums, satisNums }) => {
                 }}
                 data={lineData}
                 width={400}
-                height={250} />
+                height={200} />
         </div>
     );
 }

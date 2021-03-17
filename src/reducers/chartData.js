@@ -6,7 +6,7 @@ const defaultState = {
     labels: [],
     diffiScore: [],
     satisScore: [],
-    sortDirection: true
+    sortUp: false
 }
 
 const chartData = (state = defaultState, action) => {
@@ -15,49 +15,31 @@ const chartData = (state = defaultState, action) => {
 
         case 'SET-CHART-DATA':
 
-            //get fetched data 
             const data = action.payload;
-
-            //update state
             return { ...state, ...data };
-
         case 'SORT-CHART':
 
-            //get parameter to sort chart by (difficulty, satisfaction, label)
             const param = action.payload;
-
-            //sort labels and data
             const sortedState = sorter(param, state);
-
             return sortedState;
-
         case 'UPDATE-CHART':
 
-            //get data from  database
             const database = action.payload;
-
-            //make copy of state
             let prevState = state;
 
             const metrics = ['diffiScore', 'satisScore'];
             metrics.forEach(metric => {
-                //will hold average difficultyScores | satisfactionScores for each opdracht 
+
                 const updatedScores = [];
 
-                //get average difficultyScore | satisfactionScore for each opdracht
-                state.labels.forEach(opdracht => {
-                    //get all studentRatings for the opdracht, then get average of studentRatings
-                    const averageScore = getAverage(getStudentRatings(database, opdracht, metric));
-                    updatedScores.push(averageScore);
+                //get average difficultyScore | satisfactionScore for each assignment
+                state.labels.forEach(assignment => {
+                    const averageStudentScore = getAverage(getStudentRatings(database, assignment, metric));
+                    updatedScores.push(averageStudentScore);
                 });
-
-                //add updatedScores to copy of state
                 prevState = { ...prevState, [metric]: updatedScores };
             });
-
-            //update state with new scores
             return prevState;
-
         default:
 
             return state;

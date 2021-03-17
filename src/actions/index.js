@@ -1,5 +1,5 @@
 /* action usedBy: App | affected reducer: database  */
-// action to set initial database
+// sets student database
 export const setDatabase = (studentData) => {
     return {
         type: 'SET-DATA',
@@ -8,7 +8,7 @@ export const setDatabase = (studentData) => {
 }
 
 /* action usedBy: App | affected reducer: studentNames  */
-// action to set initial student array
+// sets student navbar
 export const setStudents = (students) => {
     return {
         type: 'SET-STUDENTS',
@@ -17,7 +17,7 @@ export const setStudents = (students) => {
 }
 
 /* action usedBy: App | affected reducer: chartData  */
-// action to set chart labels and data
+// sets chart labels and chart data
 export const setChartData = (dataArray) => {
     return {
         type: 'SET-CHART-DATA',
@@ -25,17 +25,17 @@ export const setChartData = (dataArray) => {
     }
 }
 
-/* action usedBy: App, Table | affected reducer: opdrachtChartData  */
-// action to set opdrachtChart labels and data
-export const setOpdrChartData = (dataArray) => {
+/* action usedBy: App, Table | affected reducer: assignmentChartData  */
+// sets assignmentChart labels and data
+export const setAssignmentChartData = (dataArray) => {
     return {
-        type: 'SET-OPDRACHT-CHART-DATA',
+        type: 'SET-ASSIGNMENT-CHART-DATA',
         payload: dataArray,
     }
 }
 
 /* action usedBy: Nav | affected reducer: chartData  */
-// action to update chart labels and data (on student toggle etc.)
+// updates chart labels and data
 export const updateChart = (database) => {
     return {
         type: 'UPDATE-CHART',
@@ -43,17 +43,17 @@ export const updateChart = (database) => {
     }
 }
 
-/* action usedBy: Nav | affected reducer: opdrachtChartData  */
-// action to update opdrachtChart labels and data (on student toggle)
-export const updateOpdrChart = (database) => {
+/* action usedBy: Nav | affected reducer: assignmentChartData  */
+// updates assignmentChart labels and data
+export const updateAssignmentChart = (database) => {
     return {
-        type: 'UPDATE-OPDRACHT-CHART',
+        type: 'UPDATE-ASSIGNMENT-CHART',
         payload: database,
     }
 }
 
 /* action usedBy: Nav | affected reducer: database  */
-// action to uncheck all students except selectedStudent
+// unchecks all students except selectedStudent
 export const selectStudent = (studentName) => {
     return {
         type: 'SELECTED-STUDENT',
@@ -62,7 +62,7 @@ export const selectStudent = (studentName) => {
 }
 
 /* action usedBy: Nav | affected reducer: database  */
-// action to check or uncheck a student (include | exclude student data from charts)
+// checks/ unchecks a student
 export const toggleStudent = (student) => {
     return {
         type: 'TOGGLE-STUDENT',
@@ -71,7 +71,7 @@ export const toggleStudent = (student) => {
 }
 
 /* action usedBy: SortMenu | affected reducer: chartData  */
-// action to sort chart by selected parameter
+// sort chart by selected parameter
 export const sortChart = (param) => {
     return {
         type: 'SORT-CHART',
@@ -79,17 +79,17 @@ export const sortChart = (param) => {
     }
 }
 
-/* action usedBy: SortMenu | affected reducer: opdrachtChartData  */
-// action to sort opdrachtChart by selected parameter
-export const sortOpdrChart = (param) => {
+/* action usedBy: SortMenu | affected reducer: assignmentChartData  */
+// sort assignmentChart by selected parameter
+export const sortAssignmentChart = (param) => {
     return {
-        type: 'SORT-OPDRACHT-CHART',
+        type: 'SORT-ASSIGNMENT-CHART',
         payload: param,
     }
 }
 
 /* action usedBy: Nav, Table | affected reducer: database  */
-// action to reset database (checks all students, includes all student data)
+// resets database
 export const resetData = () => {
     return {
         type: 'RESET-DATA'

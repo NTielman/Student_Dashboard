@@ -4,12 +4,8 @@ const studentNames = (state = [], action) => {
 
         case 'SET-STUDENTS':
 
-            //get fetched studentnames 
             const students = action.payload;
-
-            //update state
             return students;
-
         default:
 
             return state;

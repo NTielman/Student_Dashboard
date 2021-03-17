@@ -9,23 +9,20 @@ defaults.global.defaultFontColor = 'rgb(243, 246, 250)';
 
 const BarChart = ({ labels, diffiNums, satisNums }) => {
 
-    //checks if currentpage = homePage, studentPage or Opdrachtpage
     const location = useLocation();
     let currentPage = location.pathname.split('/')[1];
 
     const barData = (canvas) => {
 
         const ctx = canvas.getContext('2d');
-
-        //declare gradient variables
         let diffiGradient;
         let satisGradient;
 
-        //create and initialise linear gradients
-        if (currentPage === 'OpdrachtPage') {
+        //create linear gradients
+        if (currentPage === 'AssignmentPage') {
             diffiGradient = ctx.createLinearGradient(0, 300, 0, 500);
             satisGradient = ctx.createLinearGradient(0, 300, 0, 500);
-        } else { //if currentpage = homepage or studentpage use below gradients
+        } else {
             diffiGradient = ctx.createLinearGradient(0, 200, 0, 350);
             satisGradient = ctx.createLinearGradient(0, 200, 0, 350);
         }
@@ -38,9 +35,8 @@ const BarChart = ({ labels, diffiNums, satisNums }) => {
         satisGradient.addColorStop(.6, 'rgb(97, 24, 152)'); //mid: Purple
         satisGradient.addColorStop(1, 'rgb(26, 15, 67)'); //bottom: DarkBlue
 
-        //return data to be charted
         return {
-            labels, //x-axis labels: opdrachtenlijst or studentlist
+            labels, //x-axis labels: assignmentlist or studentlist
             datasets: [{
                 label: 'difficulty score',
                 data: diffiNums, //array of dificultyScores 
@@ -63,11 +59,11 @@ const BarChart = ({ labels, diffiNums, satisNums }) => {
 
             <Bar
                 options={{
-                    responsive: true, //chart size responsive to window resizing etc.
+                    responsive: true, //chart size responsive to window resizing.
                     legend: {
-                        align: "end", //aligns Legenda right 
+                        align: "end", //aligns Legend right 
                         labels: {
-                            boxWidth: 15, //sets width of Legenda colorbox
+                            boxWidth: 15, //sets width of Legend colorbox
                         }
                     },
                     tooltips: {
@@ -84,7 +80,7 @@ const BarChart = ({ labels, diffiNums, satisNums }) => {
                 }}
                 data={barData}
                 width={380}
-                height={200} />
+                height={150} />
         </div>
     );
 }

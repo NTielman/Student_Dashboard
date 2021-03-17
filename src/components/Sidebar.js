@@ -23,7 +23,6 @@ const Sidebar = ({ data, diffiNums, satisNums }) => {
         satisGradient.addColorStop(.3, 'rgb(97, 24, 152)'); //mid: Purple
         satisGradient.addColorStop(0, ' rgb(26, 15, 67)'); //right: DarkBlue
 
-        //return data to be charted
         return {
             labels: ['satisfaction', 'difficulty'],
             datasets: [{
@@ -70,7 +69,7 @@ const Sidebar = ({ data, diffiNums, satisNums }) => {
                         rotation: 1 * Math.PI, //rotates donut chart to horizontal position
                         circumference: 1 * Math.PI, //displays half doughnut chart
                         legend: {
-                            display: false //hide Legenda
+                            display: false
                         },
                     }}
                     data={doughnutData} />

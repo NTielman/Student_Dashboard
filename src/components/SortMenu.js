@@ -2,20 +2,17 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { sortChart, sortOpdrChart } from '../actions';
+import { sortChart, sortAssignmentChart } from '../actions';
 
 const SortMenu = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
-
-    //checks if currentpage = homePage, studentPage or opdrachtpage
     let currentPage = location.pathname.split('/')[1];
 
-    //sorts chart based on clicked metric and currentPage
     const handleClick = (metric) => {
-        if (currentPage === 'OpdrachtPage') {
-            dispatch(sortOpdrChart(metric))
+        if (currentPage === 'AssignmentPage') {
+            dispatch(sortAssignmentChart(metric))
         } else {
             dispatch(sortChart(metric))
         }

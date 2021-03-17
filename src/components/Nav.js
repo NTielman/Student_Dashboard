@@ -2,45 +2,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectStudent, resetData, toggleStudent, updateChart, updateOpdrChart } from '../actions';
+import { selectStudent, resetData, toggleStudent, updateChart, updateAssignmentChart } from '../actions';
 
 const Nav = () => {
 
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
-
-    //initialise Nav state as empty array
     const [menuItems, setMenuItems] = useState([]);
-
-    //get menuItems (studentNames) from Store
     const studentNames = useSelector(state => state.studentNames);
     const database = useSelector(state => state.database);
 
-    //when data has been fetched and sent to Store, update Nav menuItems
+    //after data has been fetched, update Nav items
     useEffect(() => {
 
         setMenuItems(studentNames);
-
         return () => {
             //takes user to homepage on page reload
-            /* studentPage and opdrachtPage receive data dynamically (onClick) 
-            from user interaction. To avoid errors or a blank page 
+            /* studentPage and assignmentPage receive data dynamically 
+            from user interaction. To avoid a blank page 
             on page reload (no click event = no received data), 
-            always redirect user to homepage on page reload*/
+            redirect user to homepage*/
             history.push('/');
         }
     }, [studentNames]);
 
-    //checks if currentpage = homePage, studentPage or opdrachtpage
     let currentPage = location.pathname.split('/')[1];
 
-    //checks if student checkbox should be checked
     const studentIsChecked = name => {
-        const foundStudent = database.find(student => student.name === name);
-
-        //returns true or false
-        return foundStudent.isActive;
+        const dbStudent = database.find(student => student.name === name);
+        return dbStudent.isChecked;
     };
 
     return (
@@ -49,8 +40,8 @@ const Nav = () => {
                 <li className='nav-listItem home-listItem'>
                     <Link to='/'
                         onClick={() => {
-                            dispatch(resetData()) //reselects all students
-                            dispatch(updateChart(database)) //updates homePage charts
+                            dispatch(resetData())
+                            dispatch(updateChart(database))
                         }}>
                         Home
                     </Link>
@@ -68,8 +59,8 @@ const Nav = () => {
                                     checked={studentIsChecked(student)}
                                     onChange={(event) => {
                                         dispatch(toggleStudent(event.target))
-                                        if (currentPage === 'OpdrachtPage') {
-                                            dispatch(updateOpdrChart(database))
+                                        if (currentPage === 'AssignmentPage') {
+                                            dispatch(updateAssignmentChart(database))
                                         } else {
                                             dispatch(updateChart(database))
                                         }

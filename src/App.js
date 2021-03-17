@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import Dashboard from './components/Dashboard';
 import getStudentRatings from './functions/getStudentRatings';
 import getAverage from './functions/getAverage';
-import { setDatabase, setStudents, setChartData, setOpdrChartData } from './actions';
+import { setDatabase, setStudents, setChartData, setAssignmentChartData } from './actions';
 
 function App() {
 
@@ -15,96 +15,76 @@ function App() {
 
     const getData = async () => {
 
-      //fetch data from csv file
-      const response = await fetch('/Data/student-data.csv');
+      // fetch data
+      const response = await fetch(process.env.PUBLIC_URL + '/student_database/student-data.csv');
       const data = await response.text();
 
-      //declare and initialise empty arrays to hold data info
       const studentNames = [];
-      const opdrTitles = [];
+      const assignmentTitles = [];
       const database = [];
 
-      //split data by line break and remove headers (slice)
+      // extract data
       const row = data.split('\n').slice(1);
-
-      //get columns by splitting row values by comma
       row.forEach(value => {
-
         const column = value.split(',');
         const studentName = column[0];
-        const opdrTitle = column[1];
+        const assignmentTitle = column[1];
         const difficultyScore = parseInt(column[2]);
         const satisfactionScore = parseInt(column[3]);
-        const studentObj = {
-          name: studentName, //bijv: Evelyn
-          isActive: true, //student checkbox is checked
-          scores: [{ //array of opdrachten and scores
-            title: opdrTitle, //bijv: SCRUM
-            diffiScore: difficultyScore, //bijv: 2
-            satisScore: satisfactionScore //bijv: 3
+        const newStudent = {
+          name: studentName,
+          isChecked: true,
+          scores: [{
+            title: assignmentTitle,
+            diffiScore: difficultyScore,
+            satisScore: satisfactionScore
           }],
-          id: database.length + 1 //set student id 
+          id: database.length + 1 // set student id 
         };
 
-        //if database already includes studentObject
+        // add students to database
         if (database.find(student => student.name === studentName)) {
-          //find student object
-          const foundStudent = database.find(student => student.name === studentName);
-
-          //make copy of student project scores 
-          const scoresCopy = foundStudent.scores;
-
-          //add new opdracht object to students opdrachtenLijst
-          const newOpdracht = { title: opdrTitle, diffiScore: difficultyScore, satisScore: satisfactionScore };
-          foundStudent.scores = [...scoresCopy, newOpdracht];
-
+          const dbStudent = database.find(student => student.name === studentName);
+          const studentAssignments = dbStudent.scores;
+          const newAssignment = { title: assignmentTitle, diffiScore: difficultyScore, satisScore: satisfactionScore };
+          dbStudent.scores = [...studentAssignments, newAssignment];
         } else {
-          //if database doesn't include student yet, add student
-          database.push(studentObj);
+          database.push(newStudent);
         }
 
-        //make array of studentNames for Nav bar
+        //add student names to nav bar
         if (!studentNames.includes(studentName)) {
           studentNames.push(studentName);
         }
 
-        //make array of opdracht titles for chart labels
-        if (!opdrTitles.includes(opdrTitle)) {
-          opdrTitles.push(opdrTitle);
+        //add assignment titles to chart labels
+        if (!assignmentTitles.includes(assignmentTitle)) {
+          assignmentTitles.push(assignmentTitle);
         }
       });
 
-      //create initial chartData object with available data
-      const chartData = { labels: opdrTitles };
+      //create charts
+      const chartData = { labels: assignmentTitles };
       const metrics = ['diffiScore', 'satisScore'];
 
       metrics.forEach(metric => {
-        //will hold average difficultyScores | satisfactionScores for each opdracht 
-        const scoresArray = [];
-
-        //get average difficultyScore | satisfactionScore for each opdracht
-        opdrTitles.forEach(opdracht => {
-          //get all studentRatings for the opdracht, then get average of studentRatings
-          const averageScore = getAverage(getStudentRatings(database, opdracht, metric));
-          scoresArray.push(averageScore);
+        const scores = [];
+        assignmentTitles.forEach(assignment => {
+          const averageStudentScore = getAverage(getStudentRatings(database, assignment, metric));
+          scores.push(averageStudentScore);
         });
-
-        //bijv: chartData.difficultyScores = [2, 2, 5, 3]
-        chartData[metric] = scoresArray;
+        chartData[metric] = scores;
       });
 
-      //send data to reducers and set state(s)
+      //set application state
       dispatch(setDatabase(database)); //database of all students and projectScores
       dispatch(setChartData(chartData)); //labels and data for charts
-      dispatch(setStudents(studentNames)); //array of studentnames for Nav
-      dispatch(setOpdrChartData({ labels: studentNames })); //labels for opdrachtCharts 
-
+      dispatch(setStudents(studentNames)); //navigation menu of studentnames
+      dispatch(setAssignmentChartData({ labels: studentNames })); //labels for assignmentCharts 
     }
 
-    //call getData function
     getData();
 
-    //leave dependency array empty, so useEffect only runs once
   }, []);
 
   return (

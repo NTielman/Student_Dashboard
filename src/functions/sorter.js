@@ -26,7 +26,7 @@ const sorter = (param, state) => {
     };
 
     /* to ensure labels match up with the correct data 
-    after the change in volgorde, first 
+    after the change in order, I first 
     convert all array elements into objects */
     const sortedObjects = [];
 
@@ -48,10 +48,10 @@ const sorter = (param, state) => {
         const itemA = a[param];
         const itemB = b[param];
 
-        if (state.sortDirection) {
-            return sortDown(itemA, itemB);
-        } else {
+        if (state.sortUp) {
             return sortUp(itemA, itemB);
+        } else {
+            return sortDown(itemA, itemB);
         }
 
     });
@@ -69,12 +69,11 @@ const sorter = (param, state) => {
 
     });
 
-    //return state object
     return {
         labels: sortedLabels,
         diffiScore: sortedDiffScores,
         satisScore: sortedSatScores,
-        sortDirection: !state.sortDirection
+        sortUp: !state.sortUp
     };
 
 };

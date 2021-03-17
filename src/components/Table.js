@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOpdrChartData, resetData } from '../actions';
+import { setAssignmentChartData, resetData } from '../actions';
 import getStudentRatings from '../functions/getStudentRatings';
 import getAverage from '../functions/getAverage';
 
@@ -10,13 +10,9 @@ const Table = ({ labels, diffiNums, satisNums }) => {
 
     const dispatch = useDispatch();
     const location = useLocation();
-
-    //checks if currentpage = homePage, studentPage or Opdrachtpage
     let currentPage = location.pathname.split('/')[1];
 
     const tableData = () => {
-
-        //will hold tableData objects for each row
         const rows = [];
 
         /* to ensure labels match up with the correct data 
@@ -28,7 +24,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
             let averageSatis = satisNums[index];
             let overallScore = getAverage([averageDiff, averageSatis]);
 
-            //if any dataValues are undefined or null, value = '-'
+            //if any values are undefined or null, value = '-'
             if (!overallScore) {
                 overallScore = '-';
             }
@@ -55,25 +51,18 @@ const Table = ({ labels, diffiNums, satisNums }) => {
         return rows;
     };
 
-    //onClick retreives opdracht scores from database and sets opdrachtChart state
     const database = useSelector(state => state.database);
-    const handleClick = (opdracht) => {
+    const handleClick = (assignment) => {
 
-        //create opdrachtObject to hold opdracht data
-        const selectedOpdracht = { opdracht };
-
+        const selectedAssignment = { assignment: assignment };
         const metrics = ['satisScore', 'diffiScore'];
+
         metrics.forEach(metric => {
-
-            //get student ratings per metric
-            const ratings = getStudentRatings(database, opdracht, metric);
-
-            //add ratings to opdrachtObject
-            selectedOpdracht[metric] = ratings;
+            const ratings = getStudentRatings(database, assignment, metric);
+            selectedAssignment[metric] = ratings;
         });
 
-        //update opdrachtChart state with selected opdracht data
-        dispatch(setOpdrChartData(selectedOpdracht));
+        dispatch(setAssignmentChartData(selectedAssignment));
     };
 
     return (
@@ -92,15 +81,15 @@ const Table = ({ labels, diffiNums, satisNums }) => {
                 <tbody>
                     {tableData().map(row => {
                         /*if currentPage = homepage or studentPage
-                        titles = (clickable) list of opdrachten */
-                        if (currentPage !== 'OpdrachtPage') {
+                        titles = (clickable) list of assignments */
+                        if (currentPage !== 'AssignmentPage') {
                             return (
                                 <tr key={row.id}>
                                     <th onClick={() => {
-                                        dispatch(resetData()) //reselects all students
-                                        handleClick(row.title) //retreives data to display on opdrachtPage
+                                        dispatch(resetData())
+                                        handleClick(row.title)
                                     }}>
-                                        <Link to={`/OpdrachtPage/${row.title}`}>
+                                        <Link to={`/AssignmentPage/${row.title}`}>
                                             {row.title}
                                         </Link>
                                     </th>
@@ -110,7 +99,7 @@ const Table = ({ labels, diffiNums, satisNums }) => {
                                 </tr>
                             )
                         } else {
-                            /*if currentPage = opdrachtPage
+                            /*if currentPage = AssignmentPage
                             titles = list of student Names */
                             return (
                                 <tr key={row.id}>
