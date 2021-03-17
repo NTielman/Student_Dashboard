@@ -12,17 +12,13 @@ const HomePage = () => {
     const [diffiNums, setDiffiNums] = useState([]);
 
     const getChartData = useSelector(state => state.chartData);
-    const setChartData = () => {
-        setLabels(getChartData.labels);
-        setSatisNums(getChartData.satisScore);
-        setDiffiNums(getChartData.diffiScore);
-    }
 
     //after data has been fetched
     useEffect(() => {
-        setChartData();
+        setLabels(getChartData.labels);
+        setSatisNums(getChartData.satisScore);
+        setDiffiNums(getChartData.diffiScore);
     }, [getChartData]);
-
 
     const data = { labels, satisNums, diffiNums };
     const sidebarData = {

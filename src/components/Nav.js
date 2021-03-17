@@ -25,7 +25,7 @@ const Nav = () => {
             redirect user to homepage*/
             history.push('/');
         }
-    }, [studentNames]);
+    }, [studentNames, history]);
 
     let currentPage = location.pathname.split('/')[1];
 

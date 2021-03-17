@@ -85,7 +85,7 @@ function App() {
 
     getData();
 
-  }, []);
+  }, [dispatch]);
 
   return (
     <Dashboard />
